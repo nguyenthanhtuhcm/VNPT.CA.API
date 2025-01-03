@@ -1,4 +1,6 @@
-﻿using VNPTSdkValidatorNetCore.Certificate;
+﻿using Microsoft.OpenApi.Extensions;
+using VNPT.CA.API.Model;
+using VNPTSdkValidatorNetCore.Certificate;
 using VNPTSdkValidatorNetCore.Signatures;
 
 namespace VNPT.CA.API.Repository
@@ -10,22 +12,40 @@ namespace VNPT.CA.API.Repository
         {
             cms = new Cms();
         }
-        public bool VerifyCMS(string signeddata)
+        public VerifyResultModel VerifyCMS(string signeddata)
         {
+            VerifyResultModel verifyResultModel = new VerifyResultModel();
+            verifyResultModel.TranID = Guid.NewGuid().ToString();
             var resultList = cms.Verify(Convert.FromBase64String(signeddata), null, null, null, VALIDATE_CERT_OPTION.USE_OCSP);
             Console.WriteLine("Number of Signatures: " + resultList.Count);
-
+            
+            if (resultList.Count > 0)
+            {
+                verifyResultModel.signatures = new List<SignServerVerifyResultModel>();
+            }      
             bool validate = true;
             for (int i = 0; i < resultList.Count; i++)
             {
                 validate = validate & resultList[i].signatureStatus;
-                Console.WriteLine("--------------");
-                Console.WriteLine("Signature index " + resultList[i].signatureIndex);
-                Console.WriteLine("Signature status (integrity): " + resultList[i].signatureStatus);
-                Console.WriteLine("Certificate status: " + resultList[i].certStatus);
-                Console.WriteLine("Result code: " + resultList[i].code);
+                SignServerVerifyResultModel item = new SignServerVerifyResultModel();             
+                item.signatureIndex = resultList[i].signatureIndex;
+                item.signatureStatus = resultList[i].signatureStatus;
+                item.certStatus = resultList[i].certStatus.ToString();
+                item.code = resultList[i].code.ToString();
+                item.certificate = resultList[i].certificate;
+                item.signingTime = resultList[i].signingTime;
+                verifyResultModel.signatures.Add(item);
             }
-            return false;
+            verifyResultModel.status = validate;
+            if (validate)
+            {
+                verifyResultModel.message = "Verify success";
+            }
+            else
+            {
+                verifyResultModel.message = "Verify fail";
+            }
+            return verifyResultModel;
         }
     }
 }
