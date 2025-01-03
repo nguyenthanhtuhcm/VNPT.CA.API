@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />    
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="itextsharp">
+      <HintPath>lib\VNPTValidatorNetCore\lib\itextsharp.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Custom">
+      <HintPath>lib\VNPTValidatorNetCore\lib\System.Security.Custom.dll</HintPath>
+    </Reference>
+    <Reference Include="VNPTValidatorNetCore">
+      <HintPath>lib\VNPTValidatorNetCore.dll</HintPath>
+    </Reference>
+    <Reference Include="WindowBaseExt">
+      <HintPath>lib\WindowBaseExt.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Helper\" />
+    <Folder Include="Model\" />
+  </ItemGroup>
+
+</Project>
