@@ -15,11 +15,11 @@ namespace VNPT.CA.API.Controllers
         {
             _verifyService = verifyService;
         }
-        [HttpPost]
+        [HttpPost("/CmsVerify")]
         public ActionResult CmsVerify(CmsVerifyRequest verifyRequest)
         {
 
-            if (!Licenses.CheckLicense(verifyRequest.licenseKey))
+            if (!Utilities.CheckLicense(verifyRequest.licenseKey))
             {
                 return Unauthorized(new {
                     Status = false,
@@ -30,6 +30,45 @@ namespace VNPT.CA.API.Controllers
             {
                 Status = true,
                 Data = _verifyService.VerifyCMS(verifyRequest.signeddata),
+                Message = "Verify success"
+            });
+        }
+        [HttpPost("/XmlVerify")]
+        public ActionResult XmlVerify(XmlVerifyRequest verifyRequest)
+        {
+
+            if (!Utilities.CheckLicense(verifyRequest.licenseKey))
+            {
+                return Unauthorized(new
+                {
+                    Status = false,
+                    Message = "License key is invalid"
+                });
+            }
+            return Ok(new
+            {
+                Status = true,
+                Data = _verifyService.VerifyXml(verifyRequest.signeddata),
+                Message = "Verify success"
+            });
+        }
+
+        [HttpPost("/PdfVerify")]
+        public ActionResult PdfVerify(PdfVerifyRequest verifyRequest)
+        {
+
+            if (!Utilities.CheckLicense(verifyRequest.licenseKey))
+            {
+                return Unauthorized(new
+                {
+                    Status = false,
+                    Message = "License key is invalid"
+                });
+            }
+            return Ok(new
+            {
+                Status = true,
+                Data = _verifyService.VerifyPdf(verifyRequest.signeddata),
                 Message = "Verify success"
             });
         }

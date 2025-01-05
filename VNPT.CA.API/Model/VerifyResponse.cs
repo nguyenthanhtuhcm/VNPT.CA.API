@@ -1,4 +1,6 @@
-﻿namespace VNPT.CA.API.Model
+﻿using VNPTSdkValidatorNetCore.Signatures;
+
+namespace VNPT.CA.API.Model
 {
        // Verify response -----------------------------------------------
     public class VerifyResultModel
@@ -16,7 +18,7 @@
         public string certStatus { get; set; }
         public string certificate { get; set; }
         public int signatureIndex { get; set; }
-        public string code { get; set; }
+        public VERIFY_RESULT code { get; set; }
     }
     // ---------------------------------------------------------------
 }
