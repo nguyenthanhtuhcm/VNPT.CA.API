@@ -150,5 +150,50 @@ namespace VNPT.CA.API.Repository
 
             return verifyResultModel;
         }
+
+        public VerifyResultModel VerifyOffice(string signeddataBase64)
+        {
+
+            VerifyResultModel verifyResultModel = new VerifyResultModel();
+            verifyResultModel.TranID = Guid.NewGuid().ToString();
+            try
+            {
+
+                //byte[] signeddata = Convert.FromBase64String(signeddataBase64);
+                byte[] signeddata = FileUtils.ReadFileToByte(@"D:\Project\smartCA\test\pdf\Travel Reservation August 15 for MR THANH TU NGUYEN_signed.pdf");
+                
+                var office = new Office();
+                var res = office.Verify(signeddata, null, null, null, VALIDATE_CERT_OPTION.USE_OCSP);
+                Console.WriteLine("Number of Signatures: " + res.Count);
+                if (res.Count > 0)
+                {
+                    verifyResultModel.signatures = new List<SignServerVerifyResultModel>();
+                }
+                bool validate = true;
+
+                for (int i = 0; i < res.Count; i++)
+                {
+                    validate = validate & res[i].signatureStatus;
+                    SignServerVerifyResultModel item = new SignServerVerifyResultModel();
+                    item.signatureIndex = res[i].signatureIndex;
+                    item.signatureStatus = res[i].signatureStatus;
+                    item.certStatus = res[i].certStatus.ToString();
+                    item.code = res[i].code;
+                    item.certificate = res[i].certificate;
+                    item.signingTime = res[i].signingTime;
+                    verifyResultModel.signatures.Add(item);
+                }
+                verifyResultModel.status = validate;
+                verifyResultModel.message = Utilities.ShowMessage(res[0].code);
+
+            }
+            catch (Exception ex)
+            {
+                verifyResultModel.status = false;
+                verifyResultModel.message = ex.Message;
+            }
+
+            return verifyResultModel;
+        }
     }
 }

@@ -9,6 +9,7 @@ namespace VNPT.CA.API.Repository
         public VerifyResultModel VerifyCMS(string data);
         public VerifyResultModel VerifyXml(string data);
         public VerifyResultModel VerifyPdf(string data);
+        public VerifyResultModel VerifyOffice(string data);
 
     }
 }

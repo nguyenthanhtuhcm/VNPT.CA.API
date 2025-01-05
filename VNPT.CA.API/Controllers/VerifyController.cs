@@ -53,6 +53,26 @@ namespace VNPT.CA.API.Controllers
             });
         }
 
+        [HttpPost("/OfficeVerify")]
+        public ActionResult OfficeVerify(OfficeVerifyRequest verifyRequest)
+        {
+
+            if (!Utilities.CheckLicense(verifyRequest.licenseKey))
+            {
+                return Unauthorized(new
+                {
+                    Status = false,
+                    Message = "License key is invalid"
+                });
+            }
+            return Ok(new
+            {
+                Status = true,
+                Data = _verifyService.VerifyOffice(verifyRequest.signeddata),
+                Message = "Verify success"
+            });
+        }
+
         [HttpPost("/PdfVerify")]
         public ActionResult PdfVerify(PdfVerifyRequest verifyRequest)
         {
