@@ -11,10 +11,10 @@ namespace VNPT.CA.API.Repository
 {
     public class VerifyService : IVerifyService
     {
-        private static Cms cms = null;
+        
         public VerifyService()
         {
-            cms = new Cms();
+            
         }
         public VerifyResultModel VerifyCMS(string signeddata)
         {
@@ -22,6 +22,7 @@ namespace VNPT.CA.API.Repository
             verifyResultModel.TranID = Guid.NewGuid().ToString();
             try
             {
+                var cms = new Cms();
                 var resultList = cms.Verify(Convert.FromBase64String(signeddata), null, null, null, VALIDATE_CERT_OPTION.USE_OCSP);
                 Console.WriteLine("Number of Signatures: " + resultList.Count);
 
@@ -70,7 +71,7 @@ namespace VNPT.CA.API.Repository
                     "http://www.w3.org/2000/09/xmldsig#rsa-sha1"
                 );
                 var xml = new Xml();
-                byte[] dataBytes = FileUtils.ReadFileToByte(@"D:\Project\smartCA\test_signed.xml");
+                byte[] dataBytes = Convert.FromBase64String(signeddata);
                 var res = xml.Verify(dataBytes, null, null, null, VALIDATE_CERT_OPTION.USE_OCSP);
                 Console.WriteLine("Number of Signatures: " + res.Count);
                 if (res.Count > 0)
@@ -112,8 +113,8 @@ namespace VNPT.CA.API.Repository
             try
             {
 
-                //byte[] signeddata = Convert.FromBase64String(signeddataBase64);
-                byte[] signeddata = FileUtils.ReadFileToByte(@"D:\Project\smartCA\test\pdf\Travel Reservation August 15 for MR THANH TU NGUYEN_signed.pdf");
+                byte[] signeddata = Convert.FromBase64String(signeddataBase64);
+                //byte[] signeddata = FileUtils.ReadFileToByte(@"D:\Project\smartCA\test\pdf\THANH TU NGUYEN_signed.pdf");
                 CertificateHandle certHandle = new CertificateHandle();
                 //certHandle.SetCertIssuer(rootCA);
                 //certHandle.SetCertIssuer(vnptCert);
@@ -159,8 +160,8 @@ namespace VNPT.CA.API.Repository
             try
             {
 
-                //byte[] signeddata = Convert.FromBase64String(signeddataBase64);
-                byte[] signeddata = FileUtils.ReadFileToByte(@"D:\Project\smartCA\test\pdf\Travel Reservation August 15 for MR THANH TU NGUYEN_signed.pdf");
+                byte[] signeddata = Convert.FromBase64String(signeddataBase64);
+                //byte[] signeddata = FileUtils.ReadFileToByte(@"D:\Project\smartCA\test\pdf\THANH TU NGUYEN_signed.pdf");
                 
                 var office = new Office();
                 var res = office.Verify(signeddata, null, null, null, VALIDATE_CERT_OPTION.USE_OCSP);
@@ -195,5 +196,7 @@ namespace VNPT.CA.API.Repository
 
             return verifyResultModel;
         }
+
+        
     }
 }

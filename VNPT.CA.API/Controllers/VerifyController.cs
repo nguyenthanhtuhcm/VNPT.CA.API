@@ -23,14 +23,14 @@ namespace VNPT.CA.API.Controllers
             {
                 return Unauthorized(new {
                     Status = false,
-                    Message = "License key is invalid"
+                    Message = "License key không hợp lệ"
                 });
             }
             return Ok(new
             {
                 Status = true,
                 Data = _verifyService.VerifyCMS(verifyRequest.signeddata),
-                Message = "Verify success"
+                Message = "Đã thực hiện xác thực"
             });
         }
         [HttpPost("/XmlVerify")]
@@ -42,14 +42,14 @@ namespace VNPT.CA.API.Controllers
                 return Unauthorized(new
                 {
                     Status = false,
-                    Message = "License key is invalid"
+                    Message = "License key không hợp lệ"
                 });
             }
             return Ok(new
             {
                 Status = true,
                 Data = _verifyService.VerifyXml(verifyRequest.signeddata),
-                Message = "Verify success"
+                Message = "Đã thực hiện xác thực"
             });
         }
 
@@ -62,14 +62,14 @@ namespace VNPT.CA.API.Controllers
                 return Unauthorized(new
                 {
                     Status = false,
-                    Message = "License key is invalid"
+                    Message = "License key không hợp lệ"
                 });
             }
             return Ok(new
             {
                 Status = true,
                 Data = _verifyService.VerifyOffice(verifyRequest.signeddata),
-                Message = "Verify success"
+                Message = "Đã thực hiện xác thực"
             });
         }
 
@@ -82,14 +82,14 @@ namespace VNPT.CA.API.Controllers
                 return Unauthorized(new
                 {
                     Status = false,
-                    Message = "License key is invalid"
+                    Message = "License key không hợp lệ"
                 });
             }
             return Ok(new
             {
                 Status = true,
                 Data = _verifyService.VerifyPdf(verifyRequest.signeddata),
-                Message = "Verify success"
+                Message = "Đã thực hiện xác thực"
             });
         }
 
