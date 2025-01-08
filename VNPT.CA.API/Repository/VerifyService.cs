@@ -14,7 +14,7 @@ namespace VNPT.CA.API.Repository
         
         public VerifyService()
         {
-            
+           
         }
         public VerifyResultModel VerifyCMS(string signeddata)
         {
@@ -22,6 +22,7 @@ namespace VNPT.CA.API.Repository
             verifyResultModel.TranID = Guid.NewGuid().ToString();
             try
             {
+                
                 var cms = new Cms();
                 var resultList = cms.Verify(Convert.FromBase64String(signeddata), null, null, null, VALIDATE_CERT_OPTION.USE_OCSP);
                 Console.WriteLine("Number of Signatures: " + resultList.Count);

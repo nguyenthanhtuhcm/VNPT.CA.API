@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using VNPT.CA.API.Helper;
 using VNPT.CA.API.Model;
 using VNPT.CA.API.Repository;
@@ -11,15 +12,16 @@ namespace VNPT.CA.API.Controllers
     public class VerifyController : ControllerBase
     {
         private readonly IVerifyService _verifyService;
-        public VerifyController(IVerifyService verifyService)
+        private readonly IConfiguration _configuration;
+        public VerifyController(IVerifyService verifyService, IConfiguration configuration)
         {
             _verifyService = verifyService;
+            _configuration = configuration;
         }
         [HttpPost("/CmsVerify")]
         public ActionResult CmsVerify(CmsVerifyRequest verifyRequest)
-        {
-
-            if (!Utilities.CheckLicense(verifyRequest.licenseKey))
+        {         
+            if (String.IsNullOrEmpty(_configuration["LicenseKey"]) || !Utilities.CheckLicense(_configuration["LicenseKey"]))
             {
                 return Unauthorized(new {
                     Status = false,
@@ -37,7 +39,7 @@ namespace VNPT.CA.API.Controllers
         public ActionResult XmlVerify(XmlVerifyRequest verifyRequest)
         {
 
-            if (!Utilities.CheckLicense(verifyRequest.licenseKey))
+            if (String.IsNullOrEmpty(_configuration["LicenseKey"]) || !Utilities.CheckLicense(_configuration["LicenseKey"]))
             {
                 return Unauthorized(new
                 {
@@ -57,7 +59,7 @@ namespace VNPT.CA.API.Controllers
         public ActionResult OfficeVerify(OfficeVerifyRequest verifyRequest)
         {
 
-            if (!Utilities.CheckLicense(verifyRequest.licenseKey))
+            if (String.IsNullOrEmpty(_configuration["LicenseKey"]) || !Utilities.CheckLicense(_configuration["LicenseKey"]))
             {
                 return Unauthorized(new
                 {
@@ -77,7 +79,7 @@ namespace VNPT.CA.API.Controllers
         public ActionResult PdfVerify(PdfVerifyRequest verifyRequest)
         {
 
-            if (!Utilities.CheckLicense(verifyRequest.licenseKey))
+            if (String.IsNullOrEmpty(_configuration["LicenseKey"]) || !Utilities.CheckLicense(_configuration["LicenseKey"]))
             {
                 return Unauthorized(new
                 {
